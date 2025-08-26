@@ -1,0 +1,95 @@
+syntax = "proto3";
+
+package user;
+option go_package = ".";
+
+service UserService {
+  rpc CheckEmailExists(CheckEmailExistsRequest) returns (UserCheckedResponse);
+
+  rpc CheckUsernameExists(CheckUsernameExistsRequest) returns (UserCheckedResponse);
+
+  rpc GetUserById(GetUserByIdRequest) returns (UserResponse);
+
+  rpc GetUserPublicByEmail(GetUserByEmailRequest) returns (UserPublicResponse);
+
+  rpc GetUserByUsername(GetUserByUsernameRequest) returns (UserResponse);
+
+  rpc CreateUser(CreateUserRequest) returns (UserPublicResponse);
+
+  rpc UpdateUserPassword(UpdateUserPasswordRequest) returns (UserUpdatedResponse);
+}
+
+message UsersPublicResponse {
+  repeated UserPublicResponse users = 1;
+}
+
+message GetUsersByIdRequest {
+  repeated string ids = 1;
+}
+
+message GetUserByEmailRequest {
+  string email = 1;
+}
+
+message UserUpdatedResponse {
+  bool success = 1;
+}
+
+message UpdateUserPasswordRequest {
+  string id = 1;
+  string new_password = 2;
+}
+
+message CheckEmailExistsRequest {
+  string email = 1;
+}
+
+message CheckUsernameExistsRequest {
+  string username = 1;
+}
+
+message UserCheckedResponse {
+  bool exists = 1;
+}
+
+message UserResponse {
+  string id = 1;
+  string username = 2;
+  string email = 3;
+  repeated string roles = 4;
+  string password = 5;
+  string created_at = 6;
+  ProfileResponse profile = 7;
+}
+
+message ProfileResponse {
+  string id = 1;
+  string first_name = 2;
+  string last_name = 3;
+  string gender = 4;
+  string dob = 5;
+}
+
+message UserPublicResponse {
+  string id = 1;
+  string username = 2;
+  string email = 3;
+  repeated string roles = 4;
+  string created_at = 5;
+  ProfileResponse profile = 6;
+}
+
+message GetUserByIdRequest {
+  string id = 1;
+}
+
+
+message GetUserByUsernameRequest {
+  string username = 1;
+}
+
+message CreateUserRequest {
+  string username = 1;
+  string email = 2;
+  string password = 3;
+}

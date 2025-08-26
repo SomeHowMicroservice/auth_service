@@ -1,0 +1,113 @@
+syntax = "proto3";
+
+package auth;
+option go_package = ".";
+
+service AuthService {
+  rpc SignUp(SignUpRequest) returns (SignUpResponse);
+
+  rpc VerifySignUp(VerifySignUpRequest) returns (LoggedInResponse);
+
+  rpc SignIn(SignInRequest) returns (LoggedInResponse);
+
+  rpc RefreshToken(RefreshTokenRequest) returns (RefreshTokenResponse);
+
+  rpc ChangePassword(ChangePasswordRequest) returns (RefreshTokenResponse);
+
+  rpc ForgotPassword(ForgotPasswordRequest) returns (ForgotPasswordResponse);
+
+  rpc VerifyForgotPassword(VerifyForgotPasswordRequest) returns (VerifyForgotPasswordResponse);
+
+  rpc ResetPassword(ResetPasswordRequest) returns (UpdatedResponse);
+
+  rpc AdminSignIn(SignInRequest) returns (LoggedInResponse);
+}
+
+message UpdatedResponse {
+  bool success = 1;
+}
+
+message ResetPasswordRequest {
+  string reset_password_token = 1;
+  string new_password = 2;
+}
+
+message VerifyForgotPasswordResponse {
+  string reset_password_token = 1;
+}
+
+message VerifyForgotPasswordRequest {
+  string forgot_password_token = 1;
+  string otp = 2;
+}
+
+message ForgotPasswordResponse {
+  string forgot_password_token = 1;
+}
+
+message ForgotPasswordRequest {
+  string email = 1;
+}
+
+message ChangePasswordRequest {
+  string id = 1;
+  string old_password = 2;
+  string new_password = 3;
+}
+
+message RefreshTokenRequest {
+  string id = 1;
+  repeated string roles = 2;
+}
+
+message RefreshTokenResponse {
+  string access_token = 1;
+  int64 access_expires_in = 2;
+  string refresh_token = 3;
+  int64 refresh_expires_in = 4;
+}
+
+message AuthResponse {
+  string id = 1;
+  string username = 2;
+  string email = 3;
+  string created_at = 4;
+  ProfileResponse profile = 5;
+}
+
+message ProfileResponse {
+  string id = 1;
+  string first_name = 2;
+  string last_name = 3;
+  string gender = 4;
+  string dob = 5;
+}
+
+message SignUpRequest {
+  string username = 1;
+  string email = 2;
+  string password = 3;
+}
+
+message SignUpResponse {
+  string registration_token = 1;
+}
+
+
+message VerifySignUpRequest {
+  string registration_token = 1;
+  string otp = 2;
+}
+
+message SignInRequest {
+  string username = 1;
+  string password = 2;
+}
+
+message LoggedInResponse {
+  string access_token = 1;
+  int64 access_expires_in = 2;
+  string refresh_token = 3;
+  int64 refresh_expires_in = 4;
+  AuthResponse user = 5;
+}
