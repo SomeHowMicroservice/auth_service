@@ -27,6 +27,7 @@ func main() {
 	if err != nil {
 		log.Fatalln(err)
 	}
+	defer rdb.Close()
 
 	mqc, err := initialization.InitMessageQueue(cfg)
 	if err != nil {
@@ -35,7 +36,11 @@ func main() {
 	defer mqc.Close()
 
 	userAddr = cfg.App.ServerHost + fmt.Sprintf(":%d", cfg.Services.UserPort)
-	clients := initialization.InitClients(userAddr)
+	clients, err := initialization.InitClients(userAddr)
+	if err != nil {
+		log.Fatalf("Kết nối tới các dịch vụ khác thất bại: %v", err)
+	}
+	defer clients.Close()
 
 	grpcServer := grpc.NewServer()
 	authContainer := container.NewContainer(cfg, rdb, mqc.Chann, grpcServer, clients.UserClient)
@@ -51,6 +56,6 @@ func main() {
 
 	log.Println("Khởi chạy service thành công")
 	if err := grpcServer.Serve(lis); err != nil {
-		log.Fatalf("Kết nối tới phục vụ thất bại: %v", err)
+		log.Fatalf("Serve gRPC thất bại: %v", err)
 	}
 }

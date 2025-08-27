@@ -12,17 +12,22 @@ import (
 
 type GRPCClients struct {
 	UserClient userpb.UserServiceClient
+	userConn   *grpc.ClientConn
 }
 
-func InitClients(userAddr string) *GRPCClients {
+func InitClients(userAddr string) (*GRPCClients, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second*5)
 	defer cancel()
 
 	userConn, err := grpc.DialContext(ctx, userAddr, grpc.WithTransportCredentials(insecure.NewCredentials()), grpc.WithBlock())
 	if err != nil {
-		panic(fmt.Errorf("kết nối tới User Service thất bại: %w", err))
+		return nil, fmt.Errorf("không thể kết nối tới User Service: %w", err)
 	}
 	userClient := userpb.NewUserServiceClient(userConn)
 
-	return &GRPCClients{userClient}
+	return &GRPCClients{userClient, userConn}, nil
+}
+
+func (g *GRPCClients) Close() {
+	_ = g.userConn.Close()
 }
