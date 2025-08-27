@@ -54,8 +54,9 @@ func main() {
 	}
 	defer lis.Close()
 
-	log.Println("Khởi chạy service thành công")
 	if err := grpcServer.Serve(lis); err != nil {
 		log.Fatalf("Serve gRPC thất bại: %v", err)
 	}
+
+	log.Println("Khởi chạy service thành công")
 }
