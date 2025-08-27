@@ -35,7 +35,7 @@ func main() {
 	}
 	defer mqc.Close()
 
-	userAddr = cfg.App.ServerHost + fmt.Sprintf(":%d", cfg.Services.UserPort)
+	userAddr = fmt.Sprintf("%s:%d", cfg.App.ServerHost, cfg.Services.UserPort)
 	clients, err := initialization.InitClients(userAddr)
 	if err != nil {
 		log.Fatalf("Kết nối tới các dịch vụ khác thất bại: %v", err)
