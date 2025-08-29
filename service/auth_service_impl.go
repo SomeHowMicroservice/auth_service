@@ -251,7 +251,7 @@ func (s *authServiceImpl) RefreshToken(ctx context.Context, req *authpb.RefreshT
 }
 
 func (s *authServiceImpl) ChangePassword(ctx context.Context, req *authpb.ChangePasswordRequest) (string, time.Duration, string, time.Duration, error) {
-	userRes, err := s.userClient.GetUserById(ctx, &userpb.GetUserByIdRequest{Id: req.Id})
+	userRes, err := s.userClient.GetUserById(ctx, &userpb.GetOneRequest{Id: req.Id})
 	if err != nil {
 		if st, ok := status.FromError(err); ok {
 			switch st.Code() {
