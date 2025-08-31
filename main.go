@@ -7,10 +7,8 @@ import (
 
 	"github.com/SomeHowMicroservice/shm-be/auth/config"
 	"github.com/SomeHowMicroservice/shm-be/auth/consumers"
-	"github.com/SomeHowMicroservice/shm-be/auth/container"
 	"github.com/SomeHowMicroservice/shm-be/auth/initialization"
-	authpb "github.com/SomeHowMicroservice/shm-be/auth/protobuf/auth"
-	"google.golang.org/grpc"
+	"github.com/SomeHowMicroservice/shm-be/auth/server"
 )
 
 var (
@@ -42,20 +40,18 @@ func main() {
 	}
 	defer clients.Close()
 
-	grpcServer := grpc.NewServer()
-	authContainer := container.NewContainer(cfg, rdb, mqc.Chann, grpcServer, clients.UserClient)
-	authpb.RegisterAuthServiceServer(grpcServer, authContainer.GRPCHandler)
-
-	go consumers.StartSendEmailConsumer(mqc, authContainer.SMTPService)
-
 	lis, err := net.Listen("tcp", fmt.Sprintf(":%d", cfg.App.GRPCPort))
 	if err != nil {
 		log.Fatalf("Không thể lắng nghe: %v", err)
 	}
 	defer lis.Close()
 
+	grpcServer := server.NewGRPCServer(cfg, rdb, mqc.Chann, clients.UserClient)
+
+	go consumers.StartSendEmailConsumer(mqc, grpcServer.Mailer)
+
 	log.Println("Khởi chạy service thành công")
-	if err := grpcServer.Serve(lis); err != nil {
-		log.Fatalf("Serve gRPC thất bại: %v", err)
+	if err := grpcServer.Server.Serve(lis); err != nil {
+		log.Fatalf("Chạy gRPC server thất bại: %v", err)
 	}
 }

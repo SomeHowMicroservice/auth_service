@@ -5,10 +5,10 @@ import (
 	"fmt"
 	"log"
 
-	"github.com/SomeHowMicroservice/shm-be/auth/smtp"
 	"github.com/SomeHowMicroservice/shm-be/auth/common"
 	"github.com/SomeHowMicroservice/shm-be/auth/initialization"
 	"github.com/SomeHowMicroservice/shm-be/auth/mq"
+	"github.com/SomeHowMicroservice/shm-be/auth/smtp"
 )
 
 func StartSendEmailConsumer(mqc *initialization.MQConnection, mailer smtp.SMTPService) {
@@ -17,7 +17,7 @@ func StartSendEmailConsumer(mqc *initialization.MQConnection, mailer smtp.SMTPSe
 		if err := json.Unmarshal(body, &emailMsg); err != nil {
 			return fmt.Errorf("chuyển đổi tin nhắn email thất bại: %w", err)
 		}
-		
+
 		if err := mailer.SendAuthEmail(emailMsg.To, emailMsg.Subject, emailMsg.Otp); err != nil {
 			return fmt.Errorf("gửi email thất bại: %w", err)
 		}
