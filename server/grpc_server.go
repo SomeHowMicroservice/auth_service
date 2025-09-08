@@ -8,7 +8,7 @@ import (
 	authpb "github.com/SomeHowMicroservice/shm-be/auth/protobuf/auth"
 	userpb "github.com/SomeHowMicroservice/shm-be/auth/protobuf/user"
 	"github.com/SomeHowMicroservice/shm-be/auth/smtp"
-	"github.com/rabbitmq/amqp091-go"
+	"github.com/ThreeDotsLabs/watermill/message"
 	"github.com/redis/go-redis/v9"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/keepalive"
@@ -19,7 +19,7 @@ type GRPCServer struct {
 	Mailer smtp.SMTPService
 }
 
-func NewGRPCServer(cfg *config.Config, rdb *redis.Client, mqChann *amqp091.Channel, userClient userpb.UserServiceClient) *GRPCServer {
+func NewGRPCServer(cfg *config.Config, rdb *redis.Client, publisher message.Publisher, userClient userpb.UserServiceClient) *GRPCServer {
 	kaParams := keepalive.ServerParameters{
 		Time:                  5 * time.Minute,
 		Timeout:               20 * time.Second,
@@ -38,7 +38,7 @@ func NewGRPCServer(cfg *config.Config, rdb *redis.Client, mqChann *amqp091.Chann
 		grpc.KeepaliveEnforcementPolicy(kaPolicy),
 	)
 
-	authContainer := container.NewContainer(cfg, rdb, mqChann, grpcServer, userClient)
+	authContainer := container.NewContainer(cfg, rdb, publisher, grpcServer, userClient)
 
 	authpb.RegisterAuthServiceServer(grpcServer, authContainer.GRPCHandler)
 

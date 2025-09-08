@@ -1,36 +1,36 @@
 package mq
 
-import "github.com/rabbitmq/amqp091-go"
+import (
+	"encoding/json"
+	"fmt"
+	"log"
 
-func ConsumeMessage(ch *amqp091.Channel, queueName, exchange, routingKey string, handler func([]byte) error) error {
-	if _, err := ch.QueueDeclare(queueName, true, false, false, false, nil); err != nil {
-		return err
+	"github.com/SomeHowMicroservice/shm-be/auth/common"
+	"github.com/SomeHowMicroservice/shm-be/auth/smtp"
+	"github.com/ThreeDotsLabs/watermill/message"
+)
+
+func RegisterSendEmailConsumer(router *message.Router, subscriber message.Subscriber, mailer smtp.SMTPService) {
+	router.AddConsumerHandler(
+		"send_email_handler",
+		common.SendTopic,
+		subscriber,
+		message.NoPublishHandlerFunc(func(msg *message.Message) error {
+			return handleSendEmail(msg, mailer)
+		}),
+	)
+}
+
+func handleSendEmail(msg *message.Message, mailer smtp.SMTPService) error {
+	var emailMsg common.AuthEmailMessage
+	if err := json.Unmarshal(msg.Payload, &emailMsg); err != nil {
+		return fmt.Errorf("chuyển đổi tin nhắn email thất bại: %w", err)
 	}
 
-	if err := ch.ExchangeDeclare(exchange, "direct", true, false, false, false, nil); err != nil {
-		return err
+	if err := mailer.SendAuthEmail(emailMsg.To, emailMsg.Subject, emailMsg.Otp); err != nil {
+		return fmt.Errorf("gửi email thất bại: %w", err)
 	}
-
-	if err := ch.QueueBind(queueName, routingKey, exchange, false, nil); err != nil {
-		return err
-	}
-
-	if err := ch.Qos(5, 0, false); err != nil {
-		return err
-	}
-
-	msgs, err := ch.Consume(queueName, "", true, false, false, false, nil)
-	if err != nil {
-		return err
-	}
-
-	for i := 0; i < 5; i++ {
-		go func(workerID int) {
-			for msg := range msgs {
-				processWithRetry(msg.Body, handler, workerID)
-			}
-		}(i)
-	}
-
+	log.Printf("Đã gửi email thành công tới: %s", emailMsg.To)
+	
 	return nil
 }

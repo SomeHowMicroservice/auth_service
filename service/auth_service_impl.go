@@ -14,8 +14,8 @@ import (
 	"github.com/SomeHowMicroservice/shm-be/auth/repository"
 	"github.com/SomeHowMicroservice/shm-be/auth/security"
 	"github.com/SomeHowMicroservice/shm-be/auth/smtp"
+	"github.com/ThreeDotsLabs/watermill/message"
 	"github.com/google/uuid"
-	"github.com/rabbitmq/amqp091-go"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 )
@@ -25,16 +25,16 @@ type authServiceImpl struct {
 	userClient userpb.UserServiceClient
 	mailer     smtp.SMTPService
 	cfg        *config.Config
-	mqChannel  *amqp091.Channel
+	publisher message.Publisher
 }
 
-func NewAuthService(cacheRepo repository.CacheRepository, userClient userpb.UserServiceClient, mailer smtp.SMTPService, cfg *config.Config, mqChannel *amqp091.Channel) AuthService {
+func NewAuthService(cacheRepo repository.CacheRepository, userClient userpb.UserServiceClient, mailer smtp.SMTPService, cfg *config.Config, publisher message.Publisher) AuthService {
 	return &authServiceImpl{
 		cacheRepo,
 		userClient,
 		mailer,
 		cfg,
-		mqChannel,
+		publisher,
 	}
 }
 
@@ -92,7 +92,7 @@ func (s *authServiceImpl) SignUp(ctx context.Context, req *authpb.SignUpRequest)
 		return "", fmt.Errorf("chuyển đổi EmailMessage thất bại: %w", err)
 	}
 
-	if err := mq.PublishMessage(s.mqChannel, common.Exchange, common.RoutingKey, body); err != nil {
+	if err := mq.PublishMessage(s.publisher, common.SendTopic, body); err != nil {
 		return "", fmt.Errorf("publish email msg thất bại: %w", err)
 	}
 
@@ -338,7 +338,7 @@ func (s *authServiceImpl) ForgotPassword(ctx context.Context, req *authpb.Forgot
 		return "", fmt.Errorf("chuyển đổi EmailMessage thất bại: %w", err)
 	}
 
-	if err := mq.PublishMessage(s.mqChannel, common.Exchange, common.RoutingKey, body); err != nil {
+	if err := mq.PublishMessage(s.publisher, common.SendTopic, body); err != nil {
 		return "", fmt.Errorf("publish email msg thất bại: %w", err)
 	}
 

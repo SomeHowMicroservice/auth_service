@@ -32,6 +32,7 @@ type Config struct {
 		RHost     string `mapstructure:"rb_host"`
 		RUser     string `mapstructure:"rb_user"`
 		RPassword string `mapstructure:"rb_password"`
+		RVhost string `mapstructure:"rb_vhost"`
 	} `mapstructure:"message_queue"`
 
 	SMTP struct {

@@ -1,23 +1,18 @@
 package mq
 
 import (
-	"context"
-	"time"
-
-	"github.com/rabbitmq/amqp091-go"
+	"github.com/ThreeDotsLabs/watermill"
+	"github.com/ThreeDotsLabs/watermill/message"
 )
 
-func PublishMessage(ch *amqp091.Channel, exchange, routingKey string, body []byte) error {
-	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
-	defer cancel()
+func PublishMessage(publisher message.Publisher, topic string, payload []byte) error {
+	msg := message.NewMessage(
+		watermill.NewUUID(),
+		payload,
+	)
 
-	if err := ch.PublishWithContext(ctx, exchange, routingKey, false, false, amqp091.Publishing{
-		ContentType:  "application/json",
-		DeliveryMode: amqp091.Persistent,
-		Body:         body,
-	}); err != nil {
-		return err
-	}
+	msg.Metadata.Set("content-type", "application/json")
+	msg.Metadata.Set("delivery-mode", "2")
 
-	return nil
+	return publisher.Publish(topic, msg)
 }
