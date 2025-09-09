@@ -422,11 +422,7 @@ func (s *authServiceImpl) ResetPassword(ctx context.Context, req *authpb.ResetPa
 		return fmt.Errorf("lỗi không xác định: %w", err)
 	}
 
-	if err = s.cacheRepo.DeleteAuthData(ctx, "reset-password", req.ResetPasswordToken); err != nil {
-		return err
-	}
-
-	return nil
+	return s.cacheRepo.DeleteAuthData(ctx, "reset-password", req.ResetPasswordToken)
 }
 
 func (s *authServiceImpl) AdminSignIn(ctx context.Context, req *authpb.SignInRequest) (*authpb.LoggedInResponse, error) {
