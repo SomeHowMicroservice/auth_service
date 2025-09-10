@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"log"
 	"time"
 
 	"github.com/SomeHowMicroservice/shm-be/auth/common"
@@ -25,7 +26,7 @@ type authServiceImpl struct {
 	userClient userpb.UserServiceClient
 	mailer     smtp.SMTPService
 	cfg        *config.Config
-	publisher message.Publisher
+	publisher  message.Publisher
 }
 
 func NewAuthService(cacheRepo repository.CacheRepository, userClient userpb.UserServiceClient, mailer smtp.SMTPService, cfg *config.Config, publisher message.Publisher) AuthService {
@@ -81,20 +82,18 @@ func (s *authServiceImpl) SignUp(ctx context.Context, req *authpb.SignUpRequest)
 		return "", err
 	}
 
-	emailMsg := common.AuthEmailMessage{
+	emailMsg := &common.AuthEmailMessage{
 		To:      req.Email,
 		Subject: "Xác thực đăng ký tài khoản tại SomeHow",
 		Otp:     otp,
 	}
 
-	body, err := json.Marshal(emailMsg)
-	if err != nil {
-		return "", fmt.Errorf("chuyển đổi EmailMessage thất bại: %w", err)
-	}
-
-	if err := mq.PublishMessage(s.publisher, common.SendTopic, body); err != nil {
-		return "", fmt.Errorf("publish email msg thất bại: %w", err)
-	}
+	go func(msg *common.AuthEmailMessage) {
+		body, _ := json.Marshal(msg)
+		if err := mq.PublishMessage(s.publisher, common.SendTopic, body); err != nil {
+			log.Printf("publish email msg thất bại: %v", err)
+		}
+	}(emailMsg)
 
 	return registrationToken, nil
 }
@@ -327,20 +326,18 @@ func (s *authServiceImpl) ForgotPassword(ctx context.Context, req *authpb.Forgot
 		return "", err
 	}
 
-	emailMsg := common.AuthEmailMessage{
+	emailMsg := &common.AuthEmailMessage{
 		To:      req.Email,
 		Subject: "Xác thực quên mật khẩu tại SomeHow",
 		Otp:     otp,
 	}
 
-	body, err := json.Marshal(emailMsg)
-	if err != nil {
-		return "", fmt.Errorf("chuyển đổi EmailMessage thất bại: %w", err)
-	}
-
-	if err := mq.PublishMessage(s.publisher, common.SendTopic, body); err != nil {
-		return "", fmt.Errorf("publish email msg thất bại: %w", err)
-	}
+	go func(msg *common.AuthEmailMessage) {
+		body, _ := json.Marshal(msg)
+		if err := mq.PublishMessage(s.publisher, common.SendTopic, body); err != nil {
+			log.Printf("publish email msg thất bại: %v", err)
+		}
+	}(emailMsg)
 
 	return forgotPasswordToken, nil
 }

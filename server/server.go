@@ -56,9 +56,9 @@ func NewServer(cfg *config.Config) (*Server, error) {
 		middleware.CorrelationID,
 		middleware.Retry{
 			MaxRetries:      5,
-			InitialInterval: time.Second,
+			InitialInterval: 50 * time.Millisecond,
 			Multiplier:      2.0,
-			MaxInterval:     10 * time.Second,
+			MaxInterval:     5 * time.Second,
 			Logger:          logger,
 		}.Middleware,
 		middleware.Recoverer,
