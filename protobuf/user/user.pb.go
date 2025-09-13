@@ -205,27 +205,27 @@ func (x *UpdateUserPasswordRequest) GetNewPassword() string {
 	return ""
 }
 
-type CheckEmailExistsRequest struct {
+type CheckUserExistsByEmailRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Email         string                 `protobuf:"bytes,1,opt,name=email,proto3" json:"email,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
-func (x *CheckEmailExistsRequest) Reset() {
-	*x = CheckEmailExistsRequest{}
+func (x *CheckUserExistsByEmailRequest) Reset() {
+	*x = CheckUserExistsByEmailRequest{}
 	mi := &file_proto_user_proto_msgTypes[4]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
 
-func (x *CheckEmailExistsRequest) String() string {
+func (x *CheckUserExistsByEmailRequest) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*CheckEmailExistsRequest) ProtoMessage() {}
+func (*CheckUserExistsByEmailRequest) ProtoMessage() {}
 
-func (x *CheckEmailExistsRequest) ProtoReflect() protoreflect.Message {
+func (x *CheckUserExistsByEmailRequest) ProtoReflect() protoreflect.Message {
 	mi := &file_proto_user_proto_msgTypes[4]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -237,39 +237,39 @@ func (x *CheckEmailExistsRequest) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use CheckEmailExistsRequest.ProtoReflect.Descriptor instead.
-func (*CheckEmailExistsRequest) Descriptor() ([]byte, []int) {
+// Deprecated: Use CheckUserExistsByEmailRequest.ProtoReflect.Descriptor instead.
+func (*CheckUserExistsByEmailRequest) Descriptor() ([]byte, []int) {
 	return file_proto_user_proto_rawDescGZIP(), []int{4}
 }
 
-func (x *CheckEmailExistsRequest) GetEmail() string {
+func (x *CheckUserExistsByEmailRequest) GetEmail() string {
 	if x != nil {
 		return x.Email
 	}
 	return ""
 }
 
-type CheckUsernameExistsRequest struct {
+type CheckUserExistsByUsernameRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Username      string                 `protobuf:"bytes,1,opt,name=username,proto3" json:"username,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
-func (x *CheckUsernameExistsRequest) Reset() {
-	*x = CheckUsernameExistsRequest{}
+func (x *CheckUserExistsByUsernameRequest) Reset() {
+	*x = CheckUserExistsByUsernameRequest{}
 	mi := &file_proto_user_proto_msgTypes[5]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
 
-func (x *CheckUsernameExistsRequest) String() string {
+func (x *CheckUserExistsByUsernameRequest) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*CheckUsernameExistsRequest) ProtoMessage() {}
+func (*CheckUserExistsByUsernameRequest) ProtoMessage() {}
 
-func (x *CheckUsernameExistsRequest) ProtoReflect() protoreflect.Message {
+func (x *CheckUserExistsByUsernameRequest) ProtoReflect() protoreflect.Message {
 	mi := &file_proto_user_proto_msgTypes[5]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -281,12 +281,12 @@ func (x *CheckUsernameExistsRequest) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use CheckUsernameExistsRequest.ProtoReflect.Descriptor instead.
-func (*CheckUsernameExistsRequest) Descriptor() ([]byte, []int) {
+// Deprecated: Use CheckUserExistsByUsernameRequest.ProtoReflect.Descriptor instead.
+func (*CheckUserExistsByUsernameRequest) Descriptor() ([]byte, []int) {
 	return file_proto_user_proto_rawDescGZIP(), []int{5}
 }
 
-func (x *CheckUsernameExistsRequest) GetUsername() string {
+func (x *CheckUserExistsByUsernameRequest) GetUsername() string {
 	if x != nil {
 		return x.Username
 	}
@@ -750,10 +750,10 @@ const file_proto_user_proto_rawDesc = "" +
 	"\asuccess\x18\x01 \x01(\bR\asuccess\"N\n" +
 	"\x19UpdateUserPasswordRequest\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12!\n" +
-	"\fnew_password\x18\x02 \x01(\tR\vnewPassword\"/\n" +
-	"\x17CheckEmailExistsRequest\x12\x14\n" +
-	"\x05email\x18\x01 \x01(\tR\x05email\"8\n" +
-	"\x1aCheckUsernameExistsRequest\x12\x1a\n" +
+	"\fnew_password\x18\x02 \x01(\tR\vnewPassword\"5\n" +
+	"\x1dCheckUserExistsByEmailRequest\x12\x14\n" +
+	"\x05email\x18\x01 \x01(\tR\x05email\">\n" +
+	" CheckUserExistsByUsernameRequest\x12\x1a\n" +
 	"\busername\x18\x01 \x01(\tR\busername\")\n" +
 	"\x0fCheckedResponse\x12\x16\n" +
 	"\x06exists\x18\x01 \x01(\bR\x06exists\"\xd2\x01\n" +
@@ -788,10 +788,10 @@ const file_proto_user_proto_rawDesc = "" +
 	"\x11CreateUserRequest\x12\x1a\n" +
 	"\busername\x18\x01 \x01(\tR\busername\x12\x14\n" +
 	"\x05email\x18\x02 \x01(\tR\x05email\x12\x1a\n" +
-	"\bpassword\x18\x03 \x01(\tR\bpassword2\x86\x04\n" +
-	"\vUserService\x12H\n" +
-	"\x10CheckEmailExists\x12\x1d.user.CheckEmailExistsRequest\x1a\x15.user.CheckedResponse\x12N\n" +
-	"\x13CheckUsernameExists\x12 .user.CheckUsernameExistsRequest\x1a\x15.user.CheckedResponse\x126\n" +
+	"\bpassword\x18\x03 \x01(\tR\bpassword2\x9e\x04\n" +
+	"\vUserService\x12T\n" +
+	"\x16CheckUserExistsByEmail\x12#.user.CheckUserExistsByEmailRequest\x1a\x15.user.CheckedResponse\x12Z\n" +
+	"\x19CheckUserExistsByUsername\x12&.user.CheckUserExistsByUsernameRequest\x1a\x15.user.CheckedResponse\x126\n" +
 	"\vGetUserById\x12\x13.user.GetOneRequest\x1a\x12.user.UserResponse\x12M\n" +
 	"\x14GetUserPublicByEmail\x12\x1b.user.GetUserByEmailRequest\x1a\x18.user.UserPublicResponse\x12G\n" +
 	"\x11GetUserByUsername\x12\x1e.user.GetUserByUsernameRequest\x1a\x12.user.UserResponse\x12?\n" +
@@ -813,33 +813,33 @@ func file_proto_user_proto_rawDescGZIP() []byte {
 
 var file_proto_user_proto_msgTypes = make([]protoimpl.MessageInfo, 13)
 var file_proto_user_proto_goTypes = []any{
-	(*UsersPublicResponse)(nil),        // 0: user.UsersPublicResponse
-	(*GetUserByEmailRequest)(nil),      // 1: user.GetUserByEmailRequest
-	(*UpdatedResponse)(nil),            // 2: user.UpdatedResponse
-	(*UpdateUserPasswordRequest)(nil),  // 3: user.UpdateUserPasswordRequest
-	(*CheckEmailExistsRequest)(nil),    // 4: user.CheckEmailExistsRequest
-	(*CheckUsernameExistsRequest)(nil), // 5: user.CheckUsernameExistsRequest
-	(*CheckedResponse)(nil),            // 6: user.CheckedResponse
-	(*UserResponse)(nil),               // 7: user.UserResponse
-	(*ProfileResponse)(nil),            // 8: user.ProfileResponse
-	(*UserPublicResponse)(nil),         // 9: user.UserPublicResponse
-	(*GetOneRequest)(nil),              // 10: user.GetOneRequest
-	(*GetUserByUsernameRequest)(nil),   // 11: user.GetUserByUsernameRequest
-	(*CreateUserRequest)(nil),          // 12: user.CreateUserRequest
+	(*UsersPublicResponse)(nil),              // 0: user.UsersPublicResponse
+	(*GetUserByEmailRequest)(nil),            // 1: user.GetUserByEmailRequest
+	(*UpdatedResponse)(nil),                  // 2: user.UpdatedResponse
+	(*UpdateUserPasswordRequest)(nil),        // 3: user.UpdateUserPasswordRequest
+	(*CheckUserExistsByEmailRequest)(nil),    // 4: user.CheckUserExistsByEmailRequest
+	(*CheckUserExistsByUsernameRequest)(nil), // 5: user.CheckUserExistsByUsernameRequest
+	(*CheckedResponse)(nil),                  // 6: user.CheckedResponse
+	(*UserResponse)(nil),                     // 7: user.UserResponse
+	(*ProfileResponse)(nil),                  // 8: user.ProfileResponse
+	(*UserPublicResponse)(nil),               // 9: user.UserPublicResponse
+	(*GetOneRequest)(nil),                    // 10: user.GetOneRequest
+	(*GetUserByUsernameRequest)(nil),         // 11: user.GetUserByUsernameRequest
+	(*CreateUserRequest)(nil),                // 12: user.CreateUserRequest
 }
 var file_proto_user_proto_depIdxs = []int32{
 	9,  // 0: user.UsersPublicResponse.users:type_name -> user.UserPublicResponse
 	8,  // 1: user.UserResponse.profile:type_name -> user.ProfileResponse
 	8,  // 2: user.UserPublicResponse.profile:type_name -> user.ProfileResponse
-	4,  // 3: user.UserService.CheckEmailExists:input_type -> user.CheckEmailExistsRequest
-	5,  // 4: user.UserService.CheckUsernameExists:input_type -> user.CheckUsernameExistsRequest
+	4,  // 3: user.UserService.CheckUserExistsByEmail:input_type -> user.CheckUserExistsByEmailRequest
+	5,  // 4: user.UserService.CheckUserExistsByUsername:input_type -> user.CheckUserExistsByUsernameRequest
 	10, // 5: user.UserService.GetUserById:input_type -> user.GetOneRequest
 	1,  // 6: user.UserService.GetUserPublicByEmail:input_type -> user.GetUserByEmailRequest
 	11, // 7: user.UserService.GetUserByUsername:input_type -> user.GetUserByUsernameRequest
 	12, // 8: user.UserService.CreateUser:input_type -> user.CreateUserRequest
 	3,  // 9: user.UserService.UpdateUserPassword:input_type -> user.UpdateUserPasswordRequest
-	6,  // 10: user.UserService.CheckEmailExists:output_type -> user.CheckedResponse
-	6,  // 11: user.UserService.CheckUsernameExists:output_type -> user.CheckedResponse
+	6,  // 10: user.UserService.CheckUserExistsByEmail:output_type -> user.CheckedResponse
+	6,  // 11: user.UserService.CheckUserExistsByUsername:output_type -> user.CheckedResponse
 	7,  // 12: user.UserService.GetUserById:output_type -> user.UserResponse
 	9,  // 13: user.UserService.GetUserPublicByEmail:output_type -> user.UserPublicResponse
 	7,  // 14: user.UserService.GetUserByUsername:output_type -> user.UserResponse

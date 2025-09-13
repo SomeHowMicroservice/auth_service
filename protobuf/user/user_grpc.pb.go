@@ -19,21 +19,21 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	UserService_CheckEmailExists_FullMethodName     = "/user.UserService/CheckEmailExists"
-	UserService_CheckUsernameExists_FullMethodName  = "/user.UserService/CheckUsernameExists"
-	UserService_GetUserById_FullMethodName          = "/user.UserService/GetUserById"
-	UserService_GetUserPublicByEmail_FullMethodName = "/user.UserService/GetUserPublicByEmail"
-	UserService_GetUserByUsername_FullMethodName    = "/user.UserService/GetUserByUsername"
-	UserService_CreateUser_FullMethodName           = "/user.UserService/CreateUser"
-	UserService_UpdateUserPassword_FullMethodName   = "/user.UserService/UpdateUserPassword"
+	UserService_CheckUserExistsByEmail_FullMethodName    = "/user.UserService/CheckUserExistsByEmail"
+	UserService_CheckUserExistsByUsername_FullMethodName = "/user.UserService/CheckUserExistsByUsername"
+	UserService_GetUserById_FullMethodName               = "/user.UserService/GetUserById"
+	UserService_GetUserPublicByEmail_FullMethodName      = "/user.UserService/GetUserPublicByEmail"
+	UserService_GetUserByUsername_FullMethodName         = "/user.UserService/GetUserByUsername"
+	UserService_CreateUser_FullMethodName                = "/user.UserService/CreateUser"
+	UserService_UpdateUserPassword_FullMethodName        = "/user.UserService/UpdateUserPassword"
 )
 
 // UserServiceClient is the client API for UserService service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type UserServiceClient interface {
-	CheckEmailExists(ctx context.Context, in *CheckEmailExistsRequest, opts ...grpc.CallOption) (*CheckedResponse, error)
-	CheckUsernameExists(ctx context.Context, in *CheckUsernameExistsRequest, opts ...grpc.CallOption) (*CheckedResponse, error)
+	CheckUserExistsByEmail(ctx context.Context, in *CheckUserExistsByEmailRequest, opts ...grpc.CallOption) (*CheckedResponse, error)
+	CheckUserExistsByUsername(ctx context.Context, in *CheckUserExistsByUsernameRequest, opts ...grpc.CallOption) (*CheckedResponse, error)
 	GetUserById(ctx context.Context, in *GetOneRequest, opts ...grpc.CallOption) (*UserResponse, error)
 	GetUserPublicByEmail(ctx context.Context, in *GetUserByEmailRequest, opts ...grpc.CallOption) (*UserPublicResponse, error)
 	GetUserByUsername(ctx context.Context, in *GetUserByUsernameRequest, opts ...grpc.CallOption) (*UserResponse, error)
@@ -49,20 +49,20 @@ func NewUserServiceClient(cc grpc.ClientConnInterface) UserServiceClient {
 	return &userServiceClient{cc}
 }
 
-func (c *userServiceClient) CheckEmailExists(ctx context.Context, in *CheckEmailExistsRequest, opts ...grpc.CallOption) (*CheckedResponse, error) {
+func (c *userServiceClient) CheckUserExistsByEmail(ctx context.Context, in *CheckUserExistsByEmailRequest, opts ...grpc.CallOption) (*CheckedResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(CheckedResponse)
-	err := c.cc.Invoke(ctx, UserService_CheckEmailExists_FullMethodName, in, out, cOpts...)
+	err := c.cc.Invoke(ctx, UserService_CheckUserExistsByEmail_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *userServiceClient) CheckUsernameExists(ctx context.Context, in *CheckUsernameExistsRequest, opts ...grpc.CallOption) (*CheckedResponse, error) {
+func (c *userServiceClient) CheckUserExistsByUsername(ctx context.Context, in *CheckUserExistsByUsernameRequest, opts ...grpc.CallOption) (*CheckedResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(CheckedResponse)
-	err := c.cc.Invoke(ctx, UserService_CheckUsernameExists_FullMethodName, in, out, cOpts...)
+	err := c.cc.Invoke(ctx, UserService_CheckUserExistsByUsername_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
@@ -123,8 +123,8 @@ func (c *userServiceClient) UpdateUserPassword(ctx context.Context, in *UpdateUs
 // All implementations must embed UnimplementedUserServiceServer
 // for forward compatibility.
 type UserServiceServer interface {
-	CheckEmailExists(context.Context, *CheckEmailExistsRequest) (*CheckedResponse, error)
-	CheckUsernameExists(context.Context, *CheckUsernameExistsRequest) (*CheckedResponse, error)
+	CheckUserExistsByEmail(context.Context, *CheckUserExistsByEmailRequest) (*CheckedResponse, error)
+	CheckUserExistsByUsername(context.Context, *CheckUserExistsByUsernameRequest) (*CheckedResponse, error)
 	GetUserById(context.Context, *GetOneRequest) (*UserResponse, error)
 	GetUserPublicByEmail(context.Context, *GetUserByEmailRequest) (*UserPublicResponse, error)
 	GetUserByUsername(context.Context, *GetUserByUsernameRequest) (*UserResponse, error)
@@ -140,11 +140,11 @@ type UserServiceServer interface {
 // pointer dereference when methods are called.
 type UnimplementedUserServiceServer struct{}
 
-func (UnimplementedUserServiceServer) CheckEmailExists(context.Context, *CheckEmailExistsRequest) (*CheckedResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method CheckEmailExists not implemented")
+func (UnimplementedUserServiceServer) CheckUserExistsByEmail(context.Context, *CheckUserExistsByEmailRequest) (*CheckedResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CheckUserExistsByEmail not implemented")
 }
-func (UnimplementedUserServiceServer) CheckUsernameExists(context.Context, *CheckUsernameExistsRequest) (*CheckedResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method CheckUsernameExists not implemented")
+func (UnimplementedUserServiceServer) CheckUserExistsByUsername(context.Context, *CheckUserExistsByUsernameRequest) (*CheckedResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CheckUserExistsByUsername not implemented")
 }
 func (UnimplementedUserServiceServer) GetUserById(context.Context, *GetOneRequest) (*UserResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetUserById not implemented")
@@ -182,38 +182,38 @@ func RegisterUserServiceServer(s grpc.ServiceRegistrar, srv UserServiceServer) {
 	s.RegisterService(&UserService_ServiceDesc, srv)
 }
 
-func _UserService_CheckEmailExists_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(CheckEmailExistsRequest)
+func _UserService_CheckUserExistsByEmail_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CheckUserExistsByEmailRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(UserServiceServer).CheckEmailExists(ctx, in)
+		return srv.(UserServiceServer).CheckUserExistsByEmail(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: UserService_CheckEmailExists_FullMethodName,
+		FullMethod: UserService_CheckUserExistsByEmail_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(UserServiceServer).CheckEmailExists(ctx, req.(*CheckEmailExistsRequest))
+		return srv.(UserServiceServer).CheckUserExistsByEmail(ctx, req.(*CheckUserExistsByEmailRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _UserService_CheckUsernameExists_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(CheckUsernameExistsRequest)
+func _UserService_CheckUserExistsByUsername_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CheckUserExistsByUsernameRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(UserServiceServer).CheckUsernameExists(ctx, in)
+		return srv.(UserServiceServer).CheckUserExistsByUsername(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: UserService_CheckUsernameExists_FullMethodName,
+		FullMethod: UserService_CheckUserExistsByUsername_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(UserServiceServer).CheckUsernameExists(ctx, req.(*CheckUsernameExistsRequest))
+		return srv.(UserServiceServer).CheckUserExistsByUsername(ctx, req.(*CheckUserExistsByUsernameRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -316,12 +316,12 @@ var UserService_ServiceDesc = grpc.ServiceDesc{
 	HandlerType: (*UserServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
-			MethodName: "CheckEmailExists",
-			Handler:    _UserService_CheckEmailExists_Handler,
+			MethodName: "CheckUserExistsByEmail",
+			Handler:    _UserService_CheckUserExistsByEmail_Handler,
 		},
 		{
-			MethodName: "CheckUsernameExists",
-			Handler:    _UserService_CheckUsernameExists_Handler,
+			MethodName: "CheckUserExistsByUsername",
+			Handler:    _UserService_CheckUserExistsByUsername_Handler,
 		},
 		{
 			MethodName: "GetUserById",

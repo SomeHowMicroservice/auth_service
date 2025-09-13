@@ -40,7 +40,7 @@ func NewAuthService(cacheRepo repository.CacheRepository, userClient userpb.User
 }
 
 func (s *authServiceImpl) SignUp(ctx context.Context, req *authpb.SignUpRequest) (string, error) {
-	uRes, err := s.userClient.CheckUsernameExists(ctx, &userpb.CheckUsernameExistsRequest{Username: req.Username})
+	uRes, err := s.userClient.CheckUserExistsByUsername(ctx, &userpb.CheckUserExistsByUsernameRequest{Username: req.Username})
 	if err != nil {
 		if st, ok := status.FromError(err); ok {
 			return "", fmt.Errorf("lỗi từ user service: %s", st.Message())
@@ -51,7 +51,7 @@ func (s *authServiceImpl) SignUp(ctx context.Context, req *authpb.SignUpRequest)
 		return "", common.ErrUsernameAlreadyExists
 	}
 
-	eRes, err := s.userClient.CheckEmailExists(ctx, &userpb.CheckEmailExistsRequest{Email: req.Email})
+	eRes, err := s.userClient.CheckUserExistsByEmail(ctx, &userpb.CheckUserExistsByEmailRequest{Email: req.Email})
 	if err != nil {
 		if st, ok := status.FromError(err); ok {
 			return "", fmt.Errorf("lỗi từ user service: %s", st.Message())
@@ -123,7 +123,7 @@ func (s *authServiceImpl) VerifySignUp(ctx context.Context, req *authpb.VerifySi
 		return nil, common.ErrInvalidOTP
 	}
 
-	uRes, err := s.userClient.CheckUsernameExists(ctx, &userpb.CheckUsernameExistsRequest{Username: regData.Username})
+	uRes, err := s.userClient.CheckUserExistsByUsername(ctx, &userpb.CheckUserExistsByUsernameRequest{Username: regData.Username})
 	if err != nil {
 		if st, ok := status.FromError(err); ok {
 			return nil, fmt.Errorf("lỗi từ user service: %s", st.Message())
@@ -134,7 +134,7 @@ func (s *authServiceImpl) VerifySignUp(ctx context.Context, req *authpb.VerifySi
 		return nil, common.ErrUsernameAlreadyExists
 	}
 
-	eRes, err := s.userClient.CheckEmailExists(ctx, &userpb.CheckEmailExistsRequest{Email: regData.Email})
+	eRes, err := s.userClient.CheckUserExistsByEmail(ctx, &userpb.CheckUserExistsByEmailRequest{Email: regData.Email})
 	if err != nil {
 		if st, ok := status.FromError(err); ok {
 			return nil, fmt.Errorf("lỗi từ user service: %s", st.Message())
@@ -300,7 +300,7 @@ func (s *authServiceImpl) ChangePassword(ctx context.Context, req *authpb.Change
 }
 
 func (s *authServiceImpl) ForgotPassword(ctx context.Context, req *authpb.ForgotPasswordRequest) (string, error) {
-	res, err := s.userClient.CheckEmailExists(ctx, &userpb.CheckEmailExistsRequest{
+	res, err := s.userClient.CheckUserExistsByEmail(ctx, &userpb.CheckUserExistsByEmailRequest{
 		Email: req.Email,
 	})
 	if err != nil {

@@ -4,9 +4,9 @@ package user;
 option go_package = ".";
 
 service UserService {
-  rpc CheckEmailExists(CheckEmailExistsRequest) returns (CheckedResponse);
+  rpc CheckUserExistsByEmail(CheckUserExistsByEmailRequest) returns (CheckedResponse);
 
-  rpc CheckUsernameExists(CheckUsernameExistsRequest) returns (CheckedResponse);
+  rpc CheckUserExistsByUsername(CheckUserExistsByUsernameRequest) returns (CheckedResponse);
 
   rpc GetUserById(GetOneRequest) returns (UserResponse);
 
@@ -36,11 +36,11 @@ message UpdateUserPasswordRequest {
   string new_password = 2;
 }
 
-message CheckEmailExistsRequest {
+message CheckUserExistsByEmailRequest {
   string email = 1;
 }
 
-message CheckUsernameExistsRequest {
+message CheckUserExistsByUsernameRequest {
   string username = 1;
 }
 
