@@ -82,13 +82,13 @@ func (s *authServiceImpl) SignUp(ctx context.Context, req *authpb.SignUpRequest)
 		return "", err
 	}
 
-	emailMsg := &common.AuthEmailMessage{
+	emailMsg := common.AuthEmailMessage{
 		To:      req.Email,
 		Subject: "Xác thực đăng ký tài khoản tại SomeHow",
 		Otp:     otp,
 	}
 
-	go func(msg *common.AuthEmailMessage) {
+	go func(msg common.AuthEmailMessage) {
 		body, _ := json.Marshal(msg)
 		if err := mq.PublishMessage(s.publisher, common.SendTopic, body); err != nil {
 			log.Printf("publish email msg thất bại: %v", err)
@@ -326,13 +326,13 @@ func (s *authServiceImpl) ForgotPassword(ctx context.Context, req *authpb.Forgot
 		return "", err
 	}
 
-	emailMsg := &common.AuthEmailMessage{
+	emailMsg := common.AuthEmailMessage{
 		To:      req.Email,
 		Subject: "Xác thực quên mật khẩu tại SomeHow",
 		Otp:     otp,
 	}
 
-	go func(msg *common.AuthEmailMessage) {
+	go func(msg common.AuthEmailMessage) {
 		body, _ := json.Marshal(msg)
 		if err := mq.PublishMessage(s.publisher, common.SendTopic, body); err != nil {
 			log.Printf("publish email msg thất bại: %v", err)

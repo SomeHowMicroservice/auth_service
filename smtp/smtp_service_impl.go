@@ -27,7 +27,7 @@ func NewSMTPService(cfg *config.Config) SMTPService {
 }
 
 func (s *smtpServiceImpl) Send(to, subject, body string) error {
-	msg := []byte(fmt.Sprintf("Subject: %s\r\nMIME-version: 1.0;\r\nContent-Type: text/html; charset=\"UTF-8\";\r\n\r\n%s", subject, body))
+	msg := fmt.Appendf(nil, "Subject: %s\r\nMIME-version: 1.0;\r\nContent-Type: text/html; charset=\"UTF-8\";\r\n\r\n%s", subject, body)
 	addr := fmt.Sprintf("%s:%d", s.cfg.SMTP.Host, s.cfg.SMTP.Port)
 	return smtp.SendMail(addr, s.auth, s.cfg.SMTP.Username, []string{to}, msg)
 }
