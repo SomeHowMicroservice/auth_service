@@ -3,9 +3,9 @@ package handler
 import (
 	"context"
 
-	"github.com/SomeHowMicroservice/shm-be/auth/common"
-	authpb "github.com/SomeHowMicroservice/shm-be/auth/protobuf/auth"
-	"github.com/SomeHowMicroservice/shm-be/auth/service"
+	"github.com/SomeHowMicroservice/auth/common"
+	authpb "github.com/SomeHowMicroservice/auth/protobuf/auth"
+	"github.com/SomeHowMicroservice/auth/service"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"

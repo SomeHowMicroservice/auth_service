@@ -4,7 +4,7 @@ import (
 	"context"
 	"time"
 
-	authpb "github.com/SomeHowMicroservice/shm-be/auth/protobuf/auth"
+	authpb "github.com/SomeHowMicroservice/auth/protobuf/auth"
 )
 
 type AuthService interface {

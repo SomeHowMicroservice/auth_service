@@ -4,7 +4,7 @@ import (
 	"context"
 	"time"
 
-	"github.com/SomeHowMicroservice/shm-be/auth/common"
+	"github.com/SomeHowMicroservice/auth/common"
 )
 
 type CacheRepository interface {

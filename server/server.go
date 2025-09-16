@@ -7,9 +7,9 @@ import (
 	"net"
 	"time"
 
-	"github.com/SomeHowMicroservice/shm-be/auth/config"
-	"github.com/SomeHowMicroservice/shm-be/auth/initialization"
-	"github.com/SomeHowMicroservice/shm-be/auth/mq"
+	"github.com/SomeHowMicroservice/auth/config"
+	"github.com/SomeHowMicroservice/auth/initialization"
+	"github.com/SomeHowMicroservice/auth/mq"
 	"github.com/ThreeDotsLabs/watermill"
 	"github.com/ThreeDotsLabs/watermill/message"
 	"github.com/ThreeDotsLabs/watermill/message/router/middleware"

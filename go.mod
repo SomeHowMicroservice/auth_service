@@ -1,4 +1,4 @@
-module github.com/SomeHowMicroservice/shm-be/auth
+module github.com/SomeHowMicroservice/auth
 
 go 1.23.4
 

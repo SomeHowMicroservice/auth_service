@@ -7,7 +7,7 @@ import (
 	"html/template"
 	"net/smtp"
 
-	"github.com/SomeHowMicroservice/shm-be/auth/config"
+	"github.com/SomeHowMicroservice/auth/config"
 )
 
 type smtpServiceImpl struct {

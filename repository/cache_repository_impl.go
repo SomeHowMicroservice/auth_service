@@ -6,7 +6,7 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/SomeHowMicroservice/shm-be/auth/common"
+	"github.com/SomeHowMicroservice/auth/common"
 	"github.com/redis/go-redis/v9"
 )
 

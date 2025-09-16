@@ -1,12 +1,12 @@
 package container
 
 import (
-	"github.com/SomeHowMicroservice/shm-be/auth/config"
-	"github.com/SomeHowMicroservice/shm-be/auth/handler"
-	userpb "github.com/SomeHowMicroservice/shm-be/auth/protobuf/user"
-	"github.com/SomeHowMicroservice/shm-be/auth/repository"
-	"github.com/SomeHowMicroservice/shm-be/auth/service"
-	"github.com/SomeHowMicroservice/shm-be/auth/smtp"
+	"github.com/SomeHowMicroservice/auth/config"
+	"github.com/SomeHowMicroservice/auth/handler"
+	userpb "github.com/SomeHowMicroservice/auth/protobuf/user"
+	"github.com/SomeHowMicroservice/auth/repository"
+	"github.com/SomeHowMicroservice/auth/service"
+	"github.com/SomeHowMicroservice/auth/smtp"
 	"github.com/ThreeDotsLabs/watermill/message"
 	"github.com/redis/go-redis/v9"
 	"google.golang.org/grpc"

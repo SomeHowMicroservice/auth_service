@@ -5,8 +5,8 @@ import (
 	"fmt"
 	"log"
 
-	"github.com/SomeHowMicroservice/shm-be/auth/common"
-	"github.com/SomeHowMicroservice/shm-be/auth/smtp"
+	"github.com/SomeHowMicroservice/auth/common"
+	"github.com/SomeHowMicroservice/auth/smtp"
 	"github.com/ThreeDotsLabs/watermill/message"
 )
 

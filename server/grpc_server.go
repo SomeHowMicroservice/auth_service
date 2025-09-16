@@ -3,11 +3,11 @@ package server
 import (
 	"time"
 
-	"github.com/SomeHowMicroservice/shm-be/auth/config"
-	"github.com/SomeHowMicroservice/shm-be/auth/container"
-	authpb "github.com/SomeHowMicroservice/shm-be/auth/protobuf/auth"
-	userpb "github.com/SomeHowMicroservice/shm-be/auth/protobuf/user"
-	"github.com/SomeHowMicroservice/shm-be/auth/smtp"
+	"github.com/SomeHowMicroservice/auth/config"
+	"github.com/SomeHowMicroservice/auth/container"
+	authpb "github.com/SomeHowMicroservice/auth/protobuf/auth"
+	userpb "github.com/SomeHowMicroservice/auth/protobuf/user"
+	"github.com/SomeHowMicroservice/auth/smtp"
 	"github.com/ThreeDotsLabs/watermill/message"
 	"github.com/redis/go-redis/v9"
 	"google.golang.org/grpc"

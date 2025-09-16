@@ -5,7 +5,7 @@ import (
 	"crypto/tls"
 	"fmt"
 
-	"github.com/SomeHowMicroservice/shm-be/auth/config"
+	"github.com/SomeHowMicroservice/auth/config"
 	"github.com/redis/go-redis/v9"
 )
 
