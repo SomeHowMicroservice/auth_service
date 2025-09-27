@@ -273,11 +273,10 @@ func (s *authServiceImpl) ChangePassword(ctx context.Context, req *authpb.Change
 		return "", 0, "", 0, fmt.Errorf("băm mật khẩu thất bại: %w", err)
 	}
 
-	_, err = s.userClient.UpdateUserPassword(ctx, &userpb.UpdateUserPasswordRequest{
+	if _, err = s.userClient.UpdateUserPassword(ctx, &userpb.UpdateUserPasswordRequest{
 		Id:          userRes.Id,
 		NewPassword: hashedNewPassword,
-	})
-	if err != nil {
+	}); err != nil {
 		if st, ok := status.FromError(err); ok {
 			switch st.Code() {
 			case codes.NotFound:
