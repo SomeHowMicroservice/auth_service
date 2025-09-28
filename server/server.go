@@ -5,6 +5,8 @@ import (
 	"fmt"
 	"log"
 	"net"
+	"os/signal"
+	"syscall"
 	"time"
 
 	"github.com/SomeHowMicroservice/auth/config"
@@ -128,4 +130,22 @@ func (s *Server) Shutdown(ctx context.Context) {
 	}
 
 	log.Println("Shutdown service thành công")
+}
+
+func (s *Server) GracefulShutdown(ch <-chan error) {
+	ctx, stop := signal.NotifyContext(context.Background(), syscall.SIGINT, syscall.SIGTERM)
+	defer stop()
+
+	select {
+	case err := <-ch:
+		log.Printf("Chạy service thất bại: %v", err)
+	case <-ctx.Done():
+		log.Println("Có tín hiệu dừng server")
+	}
+
+	stop()
+
+	shutdownCtx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	defer cancel()
+	s.Shutdown(shutdownCtx)
 }
