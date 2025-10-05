@@ -44,7 +44,7 @@ type Config struct {
 }
 
 func LoadConfig() (*Config, error) {
-	viper.SetConfigFile("config/config.yaml")
+	viper.SetConfigFile("config.yaml")
 	viper.SetConfigType("yaml")
 
 	if err := viper.ReadInConfig(); err != nil {
